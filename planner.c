@@ -165,25 +165,76 @@ void menu(void)
 void read_plans(void)
 {
 	FILE *wp[7];
-	int day;
-	char fname[16], ds[16]; 
+	int day, i = 0;
+	char fname[16], ds[16], fstr[100005]; 
 
 	printf("Which day's plans would you want to read? [input 0-6]\n");
 	scanf("%d", &day);
 
 	week_month_string(ds, ds, day, 16);
 	sprintf(fname, "day%d.pl", day);
-	wp[day] = fopen(fname, "w");
-	fprintf(wp[day], "Hello! Today is %s.\n", ds);
+	wp[day] = fopen(fname, "r");
+	if (wp[day] == NULL) {
+		printf("Fail to read the file named %s!\n", fname);
+		return;
+	}
+
+	while (!feof(wp[day])) {
+		fstr[i] = fgetc(wp[day]);
+		i++;
+	}
+
+	printf("%s\n", fstr);
 
 	fclose(wp[day]);
+	menu();
 }
+
 void record_plans(void)
 {
+	FILE *wp[7];
+	int day;
+	char fname[16], ds[16], ch; 
+
+	printf("Which day's plans would you want to record? [input 0-6]\n");
+	scanf("%d", &day);
+
+	week_month_string(ds, ds, day, 16);
+	sprintf(fname, "day%d.pl", day);
+	wp[day] = fopen(fname, "w");
+	fprintf(wp[day], "Time  |  Plan");
+
+	printf("Please input your plans, input '#' to stop\nTime  |  Plan\n");
+	
+	do {
+		ch = getchar();
+		fputc(ch, wp[day]);
+	} while (ch != '#');
+
+	fclose(wp[day]);
+	menu();
 }
+
 void del_plans(void)
 {
+	FILE *wp[7];
+	int day;
+	char fname[16], ds[16], ch; 
+
+	printf("Which day's plans would you want to record? [input 0-6]\n");
+	scanf("%d", &day);
+
+	week_month_string(ds, ds, day, 16);
+	sprintf(fname, "./day%d.pl", day);
+
+	if (!remove(fname)) 
+		printf("Success to remove %s!\n", fname);
+	else
+		printf("Fail to remove the file named %s!\n", fname);
+
+	menu();
 }
+
 void settings(void)
 {
 }
