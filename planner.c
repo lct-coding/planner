@@ -9,16 +9,19 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MON 1
-#define TUE 2
-#define WED 3
-#define THU 4
-#define FRI 5
-#define WND 0
-
 #define PLANNER_CURRENT_VERSION "RES_0.1"
 
-enum MONTHS {
+enum WEEKS_MONTHS {
+	/* weeks */
+	WK_SUN = 1-1,
+	WK_MON = 2-1,
+	WK_TUE = 3-1,
+	WK_WED = 4-1,
+	WK_THU = 5-1,
+	WK_FRI = 6-1,
+	WK_SAT = 7-1,
+
+	/* mouths */
 	MH_JAN = 1-1,
 	MH_FEB = 2-1,
 	MH_MAR = 3-1,
@@ -33,8 +36,12 @@ enum MONTHS {
 	MH_DEC = 12-1
 };
 
-void month_string(char*, int);
+void week_month_string(char*, char*, int, int);
 void menu(void);
+/*void read_plans(void);
+void record_plans(void);
+void del_plans(void);
+void settings(void);*/
 
 int main(void)
 {
@@ -42,20 +49,45 @@ int main(void)
 	time_t tt;
 	struct tm *ttm;
 	char tm_month[20];
+	char tm_week[20];
 
 	tt = time(0);
 	ttm = localtime(&tt);
 	
-	month_string(tm_month, ttm->tm_mon);
+	week_month_string(tm_week, tm_month, ttm->tm_wday, ttm->tm_mon);
 	system("clear");
 	printf("Planner version %s\n", PLANNER_CURRENT_VERSION);
-	printf("Today is %s %d %d\n", tm_month, ttm->tm_mday, ttm->tm_year+1900);
+	printf("Today is %s, %s %d %d\n", tm_week, tm_month, ttm->tm_mday, ttm->tm_year+1900);
 
 	return 0;
 }
 
-void month_string(char* str, int mon)
+void week_month_string(char *wk, char* str, int wek, int mon)
 {
+	switch (wek) {
+		case WK_MON:
+			strcpy(wk, "Monday");
+			break;
+		case WK_TUE:
+			strcpy(wk, "Tuesday");
+			break;
+		case WK_WED:
+			strcpy(wk, "Wednesday");
+			break;
+		case WK_THU:
+			strcpy(wk, "Thursday");
+			break;
+		case WK_FRI:
+			strcpy(wk, "Friday");
+			break;
+		case WK_SAT:
+			strcpy(wk, "Saturday");
+			break;
+		case WK_SUN:
+			strcpy(wk, "Sunday");
+			break;
+	}
+
 	switch (mon) {
 		case MH_JAN: 
 			strcpy(str, "January");
@@ -98,6 +130,8 @@ void month_string(char* str, int mon)
 
 void menu(void)
 {
+	int ch;
+
 	printf("\nChoose the service you want:\n\n");
 	printf(
 			"1.Check out plans\n"
@@ -106,4 +140,24 @@ void menu(void)
 			"4.Setting\n"
 			"0.Exit\n"
 			);
+	printf("Choose: ");
+	//scanf("%d", &ch);
+
+	/*switch (ch) {
+		case 1:
+			read_plans();
+			break;
+		case 2:
+			record_plans();
+			break;
+		case 3:
+			del_plans();
+			break;
+		case 4:
+			settings();
+			break;
+		default:
+			return;
+	}*/
 }
+
