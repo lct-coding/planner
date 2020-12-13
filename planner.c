@@ -13,13 +13,13 @@
 
 enum WEEKS_MONTHS {
 	/* weeks */
-	WK_SUN = 1-1,
-	WK_MON = 2-1,
-	WK_TUE = 3-1,
-	WK_WED = 4-1,
-	WK_THU = 5-1,
-	WK_FRI = 6-1,
-	WK_SAT = 7-1,
+	WK_SUN,
+	WK_MON,
+	WK_TUE,
+	WK_WED,
+	WK_THU,
+	WK_FRI,
+	WK_SAT,
 
 	/* mouths */
 	MH_JAN = 1-1,
@@ -38,10 +38,10 @@ enum WEEKS_MONTHS {
 
 void week_month_string(char*, char*, int, int);
 void menu(void);
-/*void read_plans(void);
+void read_plans(void);
 void record_plans(void);
 void del_plans(void);
-void settings(void);*/
+void settings(void);
 
 int main(void)
 {
@@ -143,7 +143,7 @@ void menu(void)
 	printf("Choose: ");
 	//scanf("%d", &ch);
 
-	/*switch (ch) {
+	switch (ch) {
 		case 1:
 			read_plans();
 			break;
@@ -158,6 +158,18 @@ void menu(void)
 			break;
 		default:
 			return;
-	}*/
+	}
 }
 
+void read_plans(void)
+{
+}
+void record_plans(void)
+{
+}
+void del_plans(void)
+{
+}
+void settings(void)
+{
+}
