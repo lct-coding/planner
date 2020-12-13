@@ -98,7 +98,7 @@ void month_string(char* str, int mon)
 
 void menu(void)
 {
-	printf("\nChoose you service:\n\n");
+	printf("\nChoose your service:\n\n");
 	printf(
 			"1.Check out plans\n"
 			"2.Record plans\n"
