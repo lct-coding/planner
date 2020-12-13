@@ -48,8 +48,7 @@ int main(void)
 	FILE wp[7];
 	time_t tt;
 	struct tm *ttm;
-	char tm_month[20];
-	char tm_week[20];
+	char tm_month[20], tm_week[20];
 
 	tt = time(0);
 	ttm = localtime(&tt);
@@ -58,6 +57,8 @@ int main(void)
 	system("clear");
 	printf("Planner version %s\n", PLANNER_CURRENT_VERSION);
 	printf("Today is %s, %s %d %d\n", tm_week, tm_month, ttm->tm_mday, ttm->tm_year+1900);
+
+	menu();
 
 	return 0;
 }
@@ -141,7 +142,7 @@ void menu(void)
 			"0.Exit\n"
 			);
 	printf("Choose: ");
-	//scanf("%d", &ch);
+	scanf("%d", &ch);
 
 	switch (ch) {
 		case 1:
@@ -163,6 +164,19 @@ void menu(void)
 
 void read_plans(void)
 {
+	FILE *wp[7];
+	int day;
+	char fname[16], ds[16]; 
+
+	printf("Which day's plans would you want to read? [input 0-6]\n");
+	scanf("%d", &day);
+
+	week_month_string(ds, ds, day, 16);
+	sprintf(fname, "day%d.pl", day);
+	wp[day] = fopen(fname, "w");
+	fprintf(wp[day], "Hello! Today is %s.\n", ds);
+
+	fclose(wp[day]);
 }
 void record_plans(void)
 {
