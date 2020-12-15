@@ -8,6 +8,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <time.h>
+#include <stdbool.h>
 
 #define PLANNER_CURRENT_VERSION "RES_0.1"
 
@@ -36,12 +37,16 @@ enum WEEKS_MONTHS {
 	MH_DEC = 12-1
 };
 
+/* Functions */
 void week_month_string(char*, char*, int, int);
 void menu(void);
 void read_plans(void);
 void record_plans(void);
 void del_plans(void);
 void settings(void);
+
+/* Global variable */
+bool set_opt[10] = {false}; 
 
 int main(void)
 {
@@ -129,6 +134,7 @@ void week_month_string(char *wk, char* str, int wek, int mon)
 	}
 }
 
+/* Menu */
 void menu(void)
 {
 	int ch;
@@ -162,6 +168,7 @@ void menu(void)
 	}
 }
 
+/* Read plan function */
 void read_plans(void)
 {
 	FILE *wp[7];
@@ -190,6 +197,7 @@ void read_plans(void)
 	menu();
 }
 
+/* Record function */
 void record_plans(void)
 {
 	FILE *wp[7];
@@ -215,6 +223,7 @@ void record_plans(void)
 	menu();
 }
 
+/* Delete function */
 void del_plans(void)
 {
 	FILE *wp[7];
@@ -235,6 +244,29 @@ void del_plans(void)
 	menu();
 }
 
+/* Setting function */
 void settings(void)
 {
+	int ch;
+
+	system("clear");
+	printf(
+			"\nSetting\n\n"
+			"1.Show weeks in the main menu [%s]\n"
+			"0.Back to main menu\n",
+			(set_opt[0] == true) ? "YES" : "NO"
+			);
+
+	scanf("%d", &ch);
+
+	switch (ch) {
+		case 0: menu(); break;
+		case 1: 
+			set_opt[0] = (set_opt[0] == true) ? false : true; 
+			settings();
+			break;
+		default: settings(); break;
+	}
 }
+
+
