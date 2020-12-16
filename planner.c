@@ -11,6 +11,8 @@
 #include <stdbool.h>
 
 #define PLANNER_CURRENT_VERSION "RES_0.1"
+/* turn on the debug mode if you want to see the interal info */
+#define _DEBUG
 
 enum WEEKS_MONTHS {
 	/* weeks */
@@ -47,13 +49,15 @@ void settings(void);
 
 /* Global variable */
 bool set_opt[10] = {false}; 
+bool entered;
 
 int main(void)
 {
-	FILE wp[7];
+	FILE *set_file;
 	time_t tt;
 	struct tm *ttm;
 	char tm_month[20], tm_week[20];
+	int iset;
 
 	tt = time(0);
 	ttm = localtime(&tt);
@@ -61,8 +65,28 @@ int main(void)
 	week_month_string(tm_week, tm_month, ttm->tm_wday, ttm->tm_mon);
 	system("clear");
 	printf("Planner version %s\n", PLANNER_CURRENT_VERSION);
-	printf("Today is %s, %s %d %d\n", tm_week, tm_month, ttm->tm_mday, ttm->tm_year+1900);
 
+	if ((set_file = fopen("settings.dat", "r")) == NULL) {
+		printf("Error: settings.dat not found!\n");
+		return 1;
+	}
+
+	fscanf(set_file, "%d", &iset);
+	set_opt[0] = (iset == 1) ? true : false;
+#ifdef _DEBUG
+	printf(
+			"Debug: iset = %d, set_opt[0] = %s\n"
+			"Debug: If iset is neither 1 or 0, file settings.dat might be broken\n",
+			iset, (set_opt[0] == true) ? "true" : "false"
+			);
+#endif
+
+	if (set_opt[0] == true) 
+		printf("Today is %s, %s %d %d\n", tm_week, tm_month, ttm->tm_mday, ttm->tm_year+1900);
+	else 
+		printf("Today is %s %d %d\n", tm_month, ttm->tm_mday, ttm->tm_year+1900);
+
+	fclose(set_file);
 	menu();
 
 	return 0;
@@ -139,6 +163,11 @@ void menu(void)
 {
 	int ch;
 
+	if (entered == true) 
+		system("clear");
+
+	entered = true;
+
 	printf("\nChoose the service you want:\n\n");
 	printf(
 			"1.Check out plans\n"
@@ -191,6 +220,7 @@ void read_plans(void)
 		i++;
 	}
 
+	system("clear");
 	printf("%s\n", fstr);
 
 	fclose(wp[day]);
@@ -210,10 +240,10 @@ void record_plans(void)
 	week_month_string(ds, ds, day, 16);
 	sprintf(fname, "day%d.pl", day);
 	wp[day] = fopen(fname, "w");
-	fprintf(wp[day], "Time  |  Plan");
+	fprintf(wp[day], "Plans of %s\nTime  |  Plan", ds);
 
 	printf("Please input your plans, input '#' to stop\nTime  |  Plan\n");
-	
+
 	do {
 		ch = getchar();
 		fputc(ch, wp[day]);
@@ -241,6 +271,7 @@ void del_plans(void)
 	else
 		printf("Fail to remove the file named %s!\n", fname);
 
+	fclose(wp[day]);
 	menu();
 }
 
@@ -248,10 +279,17 @@ void del_plans(void)
 void settings(void)
 {
 	int ch;
+	FILE *set_file;
 
 	system("clear");
+
+	if ((set_file = fopen("settings.dat", "r")) == NULL) {
+		printf("Error: settings.dat not found!\n");
+		exit(0);
+	}
+
 	printf(
-			"\nSetting\n\n"
+			"Setting\n\n"
 			"1.Show weeks in the main menu [%s]\n"
 			"0.Back to main menu\n",
 			(set_opt[0] == true) ? "YES" : "NO"
@@ -263,10 +301,13 @@ void settings(void)
 		case 0: menu(); break;
 		case 1: 
 			set_opt[0] = (set_opt[0] == true) ? false : true; 
+			fprintf(set_file, "\b%d", (set_opt[0] == true) ? 1 : 0);
 			settings();
 			break;
 		default: settings(); break;
 	}
+
+	fclose(set_file);
 }
 
 
