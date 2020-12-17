@@ -12,7 +12,7 @@
 
 #define PLANNER_CURRENT_VERSION "RES_0.1"
 /* turn on the debug mode if you want to see the interal info */
-#define _DEBUG
+//#define _DEBUG
 
 enum WEEKS_MONTHS {
 	/* weeks */
@@ -279,14 +279,9 @@ void del_plans(void)
 void settings(void)
 {
 	int ch;
-	FILE *set_file;
+	FILE *set_file = fopen("settings.dat", "w");
 
 	system("clear");
-
-	if ((set_file = fopen("settings.dat", "r")) == NULL) {
-		printf("Error: settings.dat not found!\n");
-		exit(0);
-	}
 
 	printf(
 			"Setting\n\n"
@@ -301,7 +296,7 @@ void settings(void)
 		case 0: menu(); break;
 		case 1: 
 			set_opt[0] = (set_opt[0] == true) ? false : true; 
-			fprintf(set_file, "\b%d", (set_opt[0] == true) ? 1 : 0);
+			fprintf(set_file, "%d", (set_opt[0] == true) ? 1 : 0);
 			settings();
 			break;
 		default: settings(); break;
