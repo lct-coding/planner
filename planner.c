@@ -202,7 +202,7 @@ void read_plans(void)
 {
 	FILE *wp[7];
 	int day, i = 0;
-	char fname[16], ds[16], fstr[100005]; 
+	char fname[16], ds[16], fstr[100005];
 
 	printf("Which day's plans would you want to read? [input 0-6]\n");
 	scanf("%d", &day);
@@ -220,8 +220,10 @@ void read_plans(void)
 		i++;
 	}
 
-	system("clear");
-	printf("%s\n", fstr);
+	printf("%s\n\nInput 0 to return to the menu\n", fstr);
+
+	while (i != 0) 
+		scanf("%d", &i);
 
 	fclose(wp[day]);
 	menu();
