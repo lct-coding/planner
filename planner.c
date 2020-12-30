@@ -260,20 +260,24 @@ void del_plans(void)
 {
 	FILE *wp[7];
 	int day;
-	char fname[16], ds[16], ch; 
+	char fname[16], ds[16], ch, sure[5]; 
 
-	printf("Which day's plans would you want to record? [input 0-6]\n");
+	printf("Which day's plans would you want to delete? [input 0-6]\n");
 	scanf("%d", &day);
 
 	week_month_string(ds, ds, day, 16);
 	sprintf(fname, "./day%d.pl", day);
 
-	if (!remove(fname)) 
-		printf("Success to remove %s!\n", fname);
-	else
-		printf("Fail to remove the file named %s!\n", fname);
+	printf("Are you sure? [default=NO]: ");
+	scanf("%s", sure);
 
-	fclose(wp[day]);
+	if (!strcmp(sure, "YES") || !strcmp(sure, "yes")) {
+		if (!remove(fname)) 
+			printf("Success to remove %s!\n", fname);	
+		else
+			printf("Fail to remove the file named %s!\n", fname);
+	}
+
 	menu();
 }
 
