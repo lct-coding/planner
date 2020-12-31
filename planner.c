@@ -258,8 +258,7 @@ void record_plans(void)
 /* Delete function */
 void del_plans(void)
 {
-	FILE *wp[7];
-	int day;
+	int day, i;
 	char fname[16], ds[16], ch, sure[5]; 
 
 	printf("Which day's plans would you want to delete? [input 0-6]\n");
@@ -277,6 +276,12 @@ void del_plans(void)
 		else
 			printf("Fail to remove the file named %s!\n", fname);
 	}
+
+	puts("Input 0 to go to the main menu...");
+
+	do {
+		scanf("%d", &i);
+	} while(i!=0);
 
 	menu();
 }
